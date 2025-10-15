@@ -1,0 +1,377 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Ayoola Chalet – Précommandez votre borne</title>
+  <meta name="description" content="Borne interactive pour chalets: accueil, règlements, activités, offres locales et revenus publicitaires. Précommandez pour financer votre première borne." />
+  <meta name="theme-color" content="#ff7a59" />
+  <meta property="og:title" content="Ayoola Chalet – Précommandez votre borne" />
+  <meta property="og:description" content="Transformez l'expérience de vos invités et générez des revenus avec une borne simple à brancher." />
+  <meta property="og:type" content="website" />
+  <style>
+    :root{
+      --bg:#0f1216;/* sombre élégant */
+      --card:#151a21;/* cartes */
+      --soft:#1b212b;/* séparateurs */
+      --brand:#ff7a59;/* corail chaleureux */
+      --brand-2:#ffd1c6;/* clair */
+      --text:#e8edf3;/* texte principal */
+      --muted:#9aa6b2;/* texte secondaire */
+      --ok:#35d07f;--warn:#ffd166;--info:#60a5fa;
+      --radius:18px;
+      --shadow:0 10px 30px rgba(0,0,0,.25), 0 2px 8px rgba(0,0,0,.2);
+    }
+    *{box-sizing:border-box}
+    html,body{height:100%}
+    body{
+      margin:0;font-family:system-ui,-apple-system,"Segoe UI",Roboto,Arial,sans-serif;
+      background:radial-gradient(1200px 800px at 80% -10%, rgba(255,122,89,.18), transparent 40%),
+                 radial-gradient(900px 600px at -10% 10%, rgba(96,165,250,.12), transparent 40%),
+                 var(--bg);
+      color:var(--text);
+      line-height:1.5;
+    }
+    a{color:var(--brand);text-decoration:none}
+    .container{width:min(1100px, 92vw);margin-inline:auto}
+    header{
+      position:sticky;top:0;z-index:40;
+      backdrop-filter: blur(10px);
+      background:linear-gradient(180deg, rgba(15,18,22,.85), rgba(15,18,22,.65));
+      border-bottom:1px solid #202632;
+    }
+    .nav{display:flex;align-items:center;justify-content:space-between;padding:14px 0}
+    .logo{display:flex;gap:10px;align-items:center}
+    .logo-badge{width:36px;height:36px;border-radius:12px;background:linear-gradient(135deg,var(--brand),#f94f6a);display:grid;place-items:center;box-shadow:var(--shadow)}
+    .logo-badge span{font-weight:700}
+    .nav a.btn{padding:10px 16px;border:1px solid #293241;border-radius:12px;color:var(--text)}
+    .nav a.cta{background:var(--brand);color:#101316;border:0;font-weight:700}
+
+    /* hero */
+    .hero{padding:62px 0 28px}
+    .hero-grid{display:grid;gap:28px;grid-template-columns:1.1fr .9fr;align-items:center}
+    .kicker{color:var(--brand-2);font-weight:700;letter-spacing:.08em;text-transform:uppercase;font-size:.8rem}
+    h1{font-size:clamp(32px, 4vw, 56px);line-height:1.05;margin:10px 0}
+    .lead{font-size:clamp(16px,2.2vw,20px);color:var(--muted)}
+    .hero-cta{display:flex;gap:12px;margin-top:18px;flex-wrap:wrap}
+    .btn{
+      background:var(--soft);border:1px solid #253041;color:var(--text);
+      padding:14px 18px;border-radius:14px;font-weight:600;cursor:pointer
+    }
+    .btn.primary{background:var(--brand);color:#0d1014;border:0}
+    .btn.ghost{background:transparent;border:1px solid #2a3342}
+    .trust{display:flex;gap:18px;margin-top:18px;color:var(--muted);font-size:.92rem;align-items:center;flex-wrap:wrap}
+
+    .mockup{background:linear-gradient(135deg,#1a2029,#101419);border:1px solid #222a36;border-radius:var(--radius);padding:18px;box-shadow:var(--shadow)}
+    .device{aspect-ratio:16/10;border-radius:16px;background:linear-gradient(180deg,#0d1117,#0a0e13);border:1px solid #263245;position:relative;overflow:hidden}
+    .device::before{content:"Ayoola";position:absolute;bottom:10px;left:50%;transform:translateX(-50%);font-size:12px;color:#7b8a9a;background:#0b0f14;border:1px solid #1e2633;padding:3px 8px;border-radius:8px}
+    .screen{
+      position:absolute;inset:12px;border-radius:10px;overflow:hidden;background:#0b0f14;border:1px solid #1e2633;display:grid;grid-template-rows:54px 1fr;
+    }
+    .screen .top{display:flex;align-items:center;justify-content:space-between;padding:0 12px;border-bottom:1px solid #1e2633;background:linear-gradient(180deg,#0f1520,#0a0f16)}
+    .pill{padding:6px 10px;border-radius:999px;border:1px solid #2a3342;color:#a7b3c4;font-size:12px}
+    .grid{display:grid;gap:12px;grid-template-columns:repeat(3,1fr);padding:12px}
+    .tile{background:#111722;border:1px solid #1f2735;border-radius:12px;padding:12px;display:grid;place-items:center;text-align:center;font-size:12px;color:#c7d2de}
+
+    /* benefits */
+    section{padding:60px 0;border-top:1px solid #202632}
+    .section-title{font-size:28px;margin-bottom:10px}
+    .section-sub{color:var(--muted);margin-bottom:22px}
+    .benefits{display:grid;gap:16px;grid-template-columns:repeat(3,1fr)}
+    .card{background:var(--card);border:1px solid #212837;border-radius:var(--radius);padding:18px;box-shadow:var(--shadow)}
+    .card h3{margin:8px 0 6px;font-size:18px}
+    .card p{color:var(--muted);font-size:.98rem}
+    .badge{font-size:.75rem;padding:6px 10px;border-radius:999px;background:#0c1117;border:1px solid #232b3a;color:#9fb1c5}
+
+    /* how it works */
+    .steps{display:grid;gap:16px;grid-template-columns:repeat(3,1fr)}
+    .step{position:relative;padding-left:12px}
+    .step .n{position:absolute;left:-6px;top:0;width:28px;height:28px;border-radius:10px;background:var(--brand);color:#101318;display:grid;place-items:center;font-weight:800;box-shadow:var(--shadow)}
+
+    /* pricing */
+    .pricing{display:grid;gap:16px;grid-template-columns:repeat(3,1fr)}
+    .price{padding:22px}
+    .price .big{font-size:38px;font-weight:800}
+    .price ul{margin:12px 0 0;padding:0;list-style:none;color:var(--muted)}
+    .price li{margin:8px 0}
+
+    /* preorder */
+    .preorder{display:grid;gap:22px;grid-template-columns:1.1fr .9fr;align-items:start}
+    form{display:grid;gap:12px}
+    label{font-size:.9rem;color:var(--muted)}
+    input,select,textarea{width:100%;padding:12px 14px;border-radius:12px;border:1px solid #2a3342;background:#0c1116;color:var(--text)}
+    textarea{min-height:110px}
+    .note{font-size:.9rem;color:var(--muted)}
+
+    /* faq */
+    details{background:var(--card);border:1px solid #212837;border-radius:12px;padding:14px}
+    details summary{cursor:pointer;font-weight:600}
+    details p{color:var(--muted)}
+
+    /* footer */
+    footer{padding:40px 0;color:var(--muted)}
+
+    /* responsive */
+    @media (max-width: 980px){
+      .hero-grid,.preorder{grid-template-columns:1fr}
+    }
+    @media (max-width: 820px){
+      .benefits,.steps,.pricing{grid-template-columns:1fr}
+      .grid{grid-template-columns:1fr 1fr}
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="container nav">
+      <div class="logo">
+        <img src="logos.png" alt="Ayoola logo" style="height:40px;border-radius:10px;">
+        <strong>Ayoola Chalet</strong>
+      </div>
+      <nav style="display:flex;gap:10px;align-items:center">
+        <a class="btn" href="#comment">Fonctionnement</a>
+        <a class="btn" href="#tarifs">Tarifs</a>
+        <a class="btn cta" href="#precommande">Précommander</a>
+      </nav>
+    </div>
+  </header>
+
+  <!-- HERO -->
+  <section class="hero">
+    <div class="container hero-grid">
+      <div>
+        <div class="kicker">Borne pour chalets • brancher et c'est tout</div>
+        <h1>Améliorez l'accueil de vos invités<br>et <span style="background:linear-gradient(90deg,var(--brand),#f94f6a);-webkit-background-clip:text;background-clip:text;color:transparent">générez des revenus</span>.</h1>
+        <p class="lead">Affichage des infos du chalet, règlements, activités à proximité et offres locales. Intégrez des publicités et recevez une part des revenus — sans effort.</p>
+        <div class="hero-cta">
+          <a class="btn primary" href="#precommande">Précommander la borne</a>
+          <a class="btn ghost" href="#demo">Voir une démo</a>
+        </div>
+        <div class="trust">
+          <span class="badge">✅ Installation en 5 minutes</span>
+          <span class="badge">🔌 Une seule prise</span>
+          <span class="badge">📶 Wi‑Fi ou hors‑ligne</span>
+        </div>
+      </div>
+      <div class="mockup" id="demo">
+        <div class="device">
+          <div class="screen">
+            <div class="top">
+              <span class="pill">Bienvenue au Chalet Nordik</span>
+              <span class="pill">12 °C • Wi‑Fi: Nordik-Guest</span>
+            </div>
+            <div class="grid">
+              <div class="tile">🏡 Infos du chalet</div>
+              <div class="tile">📜 Règlements</div>
+              <div class="tile">🧭 À proximité</div>
+              <div class="tile">📅 Rappels départ</div>
+              <div class="tile">💳 Offres partenaires</div>
+              <div class="tile">🛟 Urgences</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- BENEFITS -->
+  <section>
+    <div class="container">
+      <h2 class="section-title">Pourquoi Ayoola ?</h2>
+      <p class="section-sub">L'expérience idéale pour vos invités, avec des revenus additionnels pour vous.</p>
+      <div class="benefits">
+        <article class="card">
+          <span class="badge">Expérience client</span>
+          <h3>Accueil clair et chaleureux</h3>
+          <p>Infos essentielles, check‑in/check‑out, Wi‑Fi, poubelles, spa, bois de chauffage, consignes… tout est au même endroit.</p>
+        </article>
+        <article class="card">
+          <span class="badge">Revenus</span>
+          <h3>Monétisation intégrée</h3>
+          <p>Affichez des offres locales (restaurants, activités) et recevez une commission. Possibilité d'intégrer des pubs.</p>
+        </article>
+        <article class="card">
+          <span class="badge">Simplicité</span>
+          <h3>Brancher et c'est prêt</h3>
+          <p>Une borne tablette 10" + Raspberry Pi. Mise à jour à distance possible. Fonctionne en local si le Wi‑Fi est indisponible.</p>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <!-- HOW IT WORKS -->
+  <section id="comment">
+    <div class="container">
+      <h2 class="section-title">Comment ça marche ?</h2>
+      <div class="steps">
+        <div class="card step">
+          <div class="n">1</div>
+          <h3>Précommandez</h3>
+          <p>Vous versez un acompte pour réserver votre borne. Cela finance la production initiale.</p>
+        </div>
+        <div class="card step">
+          <div class="n">2</div>
+          <h3>Nous assemblons</h3>
+          <p>Écran 10", Raspberry Pi, coque murale, alimentation cachée. Logiciel Ayoola installé et personnalisé à votre chalet.</p>
+        </div>
+        <div class="card step">
+          <div class="n">3</div>
+          <h3>Vous branchez</h3>
+          <p>Connexion au Wi‑Fi (ou mode local). Vous gérez les contenus depuis une interface simple.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- PRICING -->
+  <section id="tarifs">
+    <div class="container">
+      <h2 class="section-title">Tarifs de lancement</h2>
+      <p class="section-sub">Prix indicatifs pour les précommandes – taxes en sus.</p>
+      <div class="pricing">
+        <div class="card price">
+          <h3>Kit Borne (précommande)</h3>
+          <div class="big">$199</div>
+          <p class="note">Acompte (déduit du prix final)</p>
+          <ul>
+            <li>Écran 10" + Pi préconfiguré</li>
+            <li>Coque murale & alimentation cachée</li>
+            <li>Assistant d'installation</li>
+          </ul>
+          <div style="margin-top:12px"><a class="btn primary" href="#precommande">Réserver</a></div>
+        </div>
+        <div class="card price" style="outline:2px solid var(--brand)">
+          <h3>Abonnement Ayoola</h3>
+          <div class="big">$19<span style="font-size:16px;font-weight:600">/mois</span></div>
+          <p class="note">Logiciel + mises à jour + support</p>
+          <ul>
+            <li>Interface propriétaire (web)</li>
+            <li>Mode hors‑ligne local</li>
+            <li>Gestion d'offres & monétisation</li>
+          </ul>
+          <div style="margin-top:12px"><a class="btn" href="#precommande">Démarrer</a></div>
+        </div>
+        <div class="card price">
+          <h3>Installation Pro (option)</h3>
+          <div class="big">$149</div>
+          <p class="note">Pose murale et câblage discret</p>
+          <ul>
+            <li>Optimisation emplacement</li>
+            <li>Câche‑câbles / alimentation</li>
+            <li>Test & formation rapide</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- PREORDER FORM -->
+  <section id="precommande">
+    <div class="container preorder card">
+      <div>
+        <h2 class="section-title">Précommandez votre borne</h2>
+        <p class="section-sub">Remplissez ce formulaire et nous vous recontactons sous 24‑48h ouvrables pour finaliser la commande.</p>
+        <ul class="note">
+          <li>Le lien d'acompte sécurisé vous sera envoyé par e‑mail.</li>
+          <li>Les premières unités seront livrées par lots (first‑come, first‑served).</li>
+        </ul>
+      </div>
+      <form id="form">
+        <div>
+          <label>Nom complet</label>
+          <input required name="name" placeholder="Ex: Elie Messanvi" />
+        </div>
+        <div>
+          <label>E‑mail</label>
+          <input required name="email" type="email" placeholder="vous@exemple.com" />
+        </div>
+        <div>
+          <label>Téléphone</label>
+          <input name="phone" placeholder="(###) ###‑####" />
+        </div>
+        <div>
+          <label>Ville / Région du chalet</label>
+          <input name="region" placeholder="Ex: Estrie, Québec" />
+        </div>
+        <div>
+          <label>Mode d'installation</label>
+          <select name="install">
+            <option value="diy">Je l'installe moi‑même</option>
+            <option value="pro">Je veux l'installation pro (+$149)</option>
+          </select>
+        </div>
+        <div>
+          <label>Commentaires</label>
+          <textarea name="notes" placeholder="Infos utiles (Airbnb, contraintes, période d'ouverture, etc.)"></textarea>
+        </div>
+        <button class="btn primary" type="submit">Envoyer ma demande</button>
+        <p class="note">En envoyant, vous acceptez d'être contacté par Ayoola pour la suite de la commande.</p>
+      </form>
+    </div>
+  </section>
+
+  <!-- FAQ -->
+  <section>
+    <div class="container">
+      <h2 class="section-title">Questions fréquentes</h2>
+      <div style="display:grid;gap:12px">
+        <details>
+          <summary>Comment je gagne de l'argent avec la borne ?</summary>
+          <p>Vous pouvez afficher des offres/partenariats locaux sur la borne (ex: restos, activités). Les ventes référées génèrent une commission pour vous. Nous travaillons aussi à l'intégration de publicités.</p>
+        </details>
+        <details>
+          <summary>Et s'il n'y a pas Internet ?</summary>
+          <p>La borne fonctionne en mode local : les infos du chalet restent accessibles. Les offres/maj se synchronisent quand le Wi‑Fi revient.</p>
+        </details>
+        <details>
+          <summary>Combien de temps pour l'installation ?</summary>
+          <p>Comptez ~5 à 15 minutes : brancher, connecter au Wi‑Fi (si disponible), et c'est prêt. Option d'installation pro disponible.</p>
+        </details>
+      </div>
+      <p class="note" style="margin-top:14px">⚠️ Document confidentiel – proposition Ayoola. Ne pas partager sans accord.</p>
+    </div>
+  </section>
+
+  <footer>
+    <div class="container" style="display:flex;justify-content:space-between;align-items:center;gap:16px;flex-wrap:wrap">
+      <small>© <span id="year"></span> Ayoola • Une solution Core Technologie</small>
+      <small><a href="#precommande">Contact & précommandes</a></small>
+    </div>
+  </footer>
+
+  <script>
+    // Année dynamique
+    document.getElementById('year').textContent = new Date().getFullYear();
+
+    // Formulaire: simulation d'envoi + instructions d'intégration
+    const form = document.getElementById('form');
+    form.addEventListener('submit', (e)=>{
+      e.preventDefault();
+      const data = Object.fromEntries(new FormData(form).entries());
+
+      // 👉 Ici, branche un vrai endpoint (Tally, Typeform, Formspree, Firebase, etc.)
+      // Exemple Formspree:
+      // fetch('https://formspree.io/f/xxxxxxxx', {method:'POST', headers:{'Accept':'application/json'}, body:new FormData(form)})
+      //   .then(r=>r.ok ? done() : alert('Erreur d\'envoi'))
+
+      // Pour la démo, on affiche une modale et on logue les données
+      console.log('Précommande:', data);
+      openModal();
+      form.reset();
+    });
+
+    function openModal(){
+      const m = document.createElement('div');
+      m.style.cssText = 'position:fixed;inset:0;background:rgba(0,0,0,.6);display:grid;place-items:center;z-index:50';
+      m.innerHTML = `
+        <div style="background:var(--card);border:1px solid #223044;border-radius:16px;box-shadow:var(--shadow);padding:22px;max-width:520px;width:92vw;text-align:center">
+          <h3 style="margin:0 0 6px">Merci ! 🎉</h3>
+          <p style="color:var(--muted)">Votre demande de précommande a été reçue. Nous vous écrirons sous 24‑48h ouvrables pour l'acompte et la suite.</p>
+          <button class="btn" id="closeM">Fermer</button>
+        </div>`;
+      document.body.appendChild(m);
+      m.querySelector('#closeM').onclick = ()=> m.remove();
+    }
+  </script>
+</body>
+</html>
