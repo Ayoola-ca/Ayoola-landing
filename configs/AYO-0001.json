@@ -1,0 +1,36 @@
+{
+  "tabs": {
+    "maison": {
+      "leftTitle": "Maison — contrôle intelligent",
+      "leftList": [
+        "Wi-Fi: tiroir d’entrée",
+        "Thermostat: 21 °C jour"
+      ],
+      "rightTitle": "À savoir",
+      "rightBody": "Merci de respecter le voisinage après 22 h.",
+      "mode": "home"
+    },
+    "offres": {
+      "leftTitle": "Commerces autour du chalet",
+      "leftList": [
+        "Resto du village — 10 %",
+        "Café Nordik — 2 pour 1 (8–10 h)"
+      ],
+      "rightTitle": "Offres locales",
+      "rightBody": "Touchez la bannière pour découvrir les promos.",
+      "mode": "ads"
+    }
+  },
+  "slides": [
+    {
+      "type": "img",
+      "src": "https://images.unsplash.com/photo-1543352634-8730f7cbcbc5?q=80&w=1600&auto=format&fit=crop",
+      "href": "https://exemple-bistro.local"
+    },
+    {
+      "type": "video",
+      "src": "https://interactive-examples.mdn.mozilla.net/media/cc0-videos/flower.mp4",
+      "href": "https://exemple-spa.local"
+    }
+  ]
+}
