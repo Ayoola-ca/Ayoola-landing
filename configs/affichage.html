@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Ayoola – Affichage borne</title>
+  <meta name="theme-color" content="#000000" />
+
+  <!-- ✅ SCRIPT DE CHARGEMENT AUTOMATIQUE -->
+  <script>
+  (function () {
+    const params = new URLSearchParams(location.search);
+    const DEVICE_ID = params.get('id') || 'AYO-0001';
+    const CONFIG_URL = `${location.origin}/configs/${DEVICE_ID}.json`;
+
+    async function loadConfig() {
+      try {
+        const res = await fetch(CONFIG_URL + '?ts=' + Date.now(), { cache: 'no-store' });
+        if (!res.ok) throw new Error('HTTP ' + res.status);
+        const cfg = await res.json();
+        window.DATA   = cfg.tabs   || {};
+        window.SLIDES = cfg.slides || [];
+        if (typeof render === 'function') render('maison');
+        if (typeof startAds === 'function') startAds();
+      } catch (e) {
+        console.warn('Chargement config échoué:', e);
+      }
+    }
+    loadConfig();
+    setInterval(loadConfig, 180000); // recharge toutes les 3 min
+  })();
+  </script>
+
+  <style>
+    :root{
+      --bg:#0b0b0d;--text:#ffe9cc;--muted:#bfae9a;--ok:#ffd7a1;
+      --brand:#ff6b1a;--brand-2:#ff2d1a;--ring:0 0 0 1px #7b1b10,0 0 24px 2px #ff3b1a8f;
+    }
+    *{box-sizing:border-box}
+    html,body{height:100%;margin:0;color:var(--text);
+      font-family:ui-sans-serif,system-ui,-apple-system,"Segoe UI",Roboto,Arial,sans-serif;
+      background:linear-gradient(0deg,rgba(0,0,0,.45),rgba(0,0,0,.45)),
+      url('https://images.unsplash.com/photo-1501785888041-af3ef285b470?q=80&w=1600&auto=format&fit=crop') center/cover fixed;}
+    .container{max-width:1280px;margin:0 auto;padding:22px}
+    .screen{min-height:100dvh}
+    .topbar{display:flex;align-items:center;justify-content:space-between;gap:16px;
+      padding:10px 14px;border-radius:16px;margin-bottom:16px;
+      background:linear-gradient(180deg,#141214 0%,#0e0d0e 100%);box-shadow:var(--ring);}
+    .brand{display:flex;align-items:center;gap:12px;font-weight:900;text-transform:uppercase;color:var(--ok);letter-spacing:.18rem;font-size:18px}
+    .brand .dot{width:10px;height:10px;border-radius:999px;background:var(--brand-2);box-shadow:0 0 16px 2px var(--brand-2)}
+    .muted{color:var(--muted);font-size:14px}
+    .tabs{display:flex;gap:10px;flex-wrap:wrap;margin:12px 0 0}
+    .tab{display:inline-flex;align-items:center;gap:8px;padding:10px 14px;border-radius:14px;cursor:pointer;
+      background:linear-gradient(180deg,#161417,#0f0e10);border:1px solid #2a2320;
+      color:#ffe9cc;font-weight:700;transition:.2s}
+    .tab:hover{box-shadow:0 0 18px 2px #ff3b1a33;transform:translateY(-1px)}
+    .tab.active{background:radial-gradient(120% 120% at 30% 20%,#2a1713 0%,#130f10 60%);
+      border-color:#682015;box-shadow:var(--ring);color:#fff3e0}
+    .panel{margin-top:16px;padding:18px;border-radius:22px;
+      background:linear-gradient(180deg,#141214 0%,#0f0e0f 100%);
+      border:1px solid #2c1f1b;box-shadow:var(--ring)}
+    .headline{font-size:34px;font-weight:900;margin:8px 0 10px 4px;color:#ffe8c8}
+    .sub{color:var(--muted);margin-left:6px}
+    .grid{display:grid;gap:16px;grid-template-columns:1.3fr 1fr}
+    @media (max-width:1000px){.grid{grid-template-columns:1fr}}
+    .card{background:radial-gradient(90% 140% at 10% 10%,#241311 0%,#130f10 60%);
+      border:1px solid #32201c;border-radius:20px;padding:18px;box-shadow:var(--ring)}
+    .tempWrap{display:grid;grid-template-columns:auto 1fr;gap:22px;align-items:center;min-height:150px}
+    .tempVal{font-size:72px;font-weight:900;color:#ffdcb3;line-height:1;text-shadow:0 0 30px #ff3b1a55}
+    .chips{display:flex;flex-direction:column;gap:8px;color:#f7dac0;font-size:18px}
+    .chip{display:inline-flex;align-items:center;gap:8px;padding:8px 12px;border-radius:999px;
+      background:linear-gradient(180deg,#1e1512,#151012);border:1px solid #3a2722;font-weight:700}
+    .chip .dot{width:8px;height:8px;border-radius:999px;background:#ffb775;box-shadow:0 0 10px 2px #ffb775aa}
+    .infoTitle{font-size:22px;font-weight:800;color:#ffe8c8;margin:0 0 4px}
+    .bullets{margin:0;padding-left:18px}
+    .bullets li{margin:4px 0;color:#f7dac0}
+    .billboard{aspect-ratio:16/9;border-radius:16px;overflow:hidden;border:1px solid #5a2a1f;
+      box-shadow:inset 0 0 0 1px #261512,0 0 20px 1px #ff3b1a22;cursor:pointer}
+    .billboard img,.billboard video{width:100%;height:100%;object-fit:cover;display:block}
+    .clock{font-weight:900;color:#ffe9cc;font-size:16px;opacity:.8;text-align:right;margin-top:6px}
+  </style>
+</head>
+<body>
+  <div class="container screen">
+    <div class="topbar">
+      <div class="brand"><span class="dot"></span> AYOOLA&nbsp;CHALET</div>
+      <div class="muted">Maison – contrôle intelligent</div>
+    </div>
+
+    <div class="tabs" id="tabs">
+      <div class="tab active" data-key="maison">🏠 Maison</div>
+      <div class="tab" data-key="patio">🌅 Patio</div>
+      <div class="tab" data-key="sdb">🚿 Salle de bain</div>
+      <div class="tab" data-key="cuisine">🍳 Cuisine</div>
+      <div class="tab" data-key="chambre">🛏️ Chambre</div>
+      <div class="tab" data-key="offres">🛍️ Offres</div>
+    </div>
+
+    <div class="panel">
+      <div class="headline" id="headline">Maison — CONTRÔLE INTELLIGENT</div>
+      <div class="sub" id="subcopy">Ambiance été • infos et publicités locales</div>
+      <div class="grid">
+        <div class="card" id="leftCard">
+          <div class="tempWrap" id="tempWrap">
+            <div class="tempVal" id="tempVal">21°</div>
+            <div class="chips">
+              <span class="chip"><span class="dot"></span> Température</span>
+              <span class="chip"><span class="dot"></span> Lumières</span>
+              <span class="chip"><span class="dot"></span> Propriété non-fumeur</span>
+            </div>
+          </div>
+          <div id="leftInfo" style="display:none">
+            <h3 class="infoTitle" id="leftTitle">Titre</h3>
+            <ul class="bullets" id="leftList"></ul>
+          </div>
+        </div>
+
+        <div class="card" id="rightCard">
+          <div class="billboard" id="billboard"></div>
+          <div class="clock" id="clock">--:--</div>
+          <div id="rightInfo" style="display:none">
+            <h3 class="infoTitle" id="rightTitle">Conseils</h3>
+            <p id="rightBody" style="margin:0;color:#bfae9a">…</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+  const $ = id => document.getElementById(id);
+  const pad = n => String(n).padStart(2,'0');
+  setInterval(()=>{ const d=new Date(); $('clock').textContent=`${pad(d.getHours())}:${pad(d.getMinutes())}`; },1000);
+
+  function render(key){
+    const d = window.DATA[key] || window.DATA.maison || {};
+    $('headline').textContent = d.leftTitle || '';
+    if(d.mode==='home'){
+      $('tempWrap').style.display='grid';
+      $('leftInfo').style.display='none';
+    } else {
+      $('tempWrap').style.display='none';
+      $('leftInfo').style.display='block';
+      $('leftTitle').textContent = d.leftTitle || '';
+      const ul = $('leftList'); ul.innerHTML='';
+      (d.leftList||[]).forEach(t=>{ const li=document.createElement('li'); li.textContent=t; ul.appendChild(li); });
+    }
+    if(d.mode==='info'){
+      $('rightInfo').style.display='block';
+      $('billboard').style.display='none';
+      $('rightTitle').textContent = d.rightTitle || '';
+      $('rightBody').textContent  = d.rightBody || '';
+      stopAds();
+    } else {
+      $('rightInfo').style.display='none';
+      $('billboard').style.display='block';
+      startAds();
+    }
+  }
+
+  let slide=0,timer;
+  function showSlide(){
+    const bb=$('billboard');bb.innerHTML='';
+    const s=window.SLIDES[slide%window.SLIDES.length];
+    if(!s)return;
+    if(s.type==='video'){
+      const v=document.createElement('video');
+      v.src=s.src;v.autoplay=true;v.loop=true;v.muted=true;v.playsInline=true;bb.appendChild(v);
+    }else{
+      const img=document.createElement('img');img.src=s.src;bb.appendChild(img);
+    }
+    bb.onclick=()=>{if(s.href)window.open(s.href,'_blank');};
+  }
+  function startAds(){clearInterval(timer);showSlide();timer=setInterval(()=>{slide++;showSlide();},9000);}
+  function stopAds(){clearInterval(timer);$('billboard').innerHTML='';}
+
+  document.querySelectorAll('.tab').forEach(t=>{
+    t.addEventListener('click',()=>{
+      document.querySelectorAll('.tab').forEach(x=>x.classList.remove('active'));
+      t.classList.add('active');
+      render(t.dataset.key);
+    });
+  });
+  setInterval(()=>{const base=21,amp=2,now=Date.now()/1000;
+    $('tempVal').textContent=`${Math.round(base+Math.sin(now/180)*amp)}°`;},4000);
+  </script>
+</body>
+</html>
