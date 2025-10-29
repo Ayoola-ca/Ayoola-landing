@@ -6,28 +6,52 @@
   <title>Ayoola – Affichage borne</title>
   <meta name="theme-color" content="#000000" />
 
-  <!-- ✅ SCRIPT DE CHARGEMENT AUTOMATIQUE -->
+  <!-- ✅ CHARGEMENT DYNAMIQUE DE LA CONFIG PAR ID -->
   <script>
   (function () {
-    const params = new URLSearchParams(location.search);
-    const DEVICE_ID = params.get('id') || 'AYO-0001';
+    const qs = new URLSearchParams(location.search);
+    const DEVICE_ID  = (qs.get('id') || 'AYO-0001').trim();
     const CONFIG_URL = `${location.origin}/configs/${DEVICE_ID}.json`;
+
+    // petit badge debug (retire-le plus tard si tu veux)
+    function badge(txt, color="#16a34a"){
+      const b = document.createElement('div');
+      b.textContent = txt;
+      b.style.cssText = "position:fixed;right:10px;bottom:10px;background:"+color+";color:#fff;padding:6px 10px;border-radius:999px;font:600 12px system-ui;z-index:99999";
+      document.addEventListener('DOMContentLoaded',()=>{ document.body.appendChild(b); setTimeout(()=>b.remove(),3500); });
+    }
+
+    function applyConfig(cfg){
+      // Injecte les données globales
+      window.DATA   = cfg?.tabs   || {};
+      window.SLIDES = Array.isArray(cfg?.slides) ? cfg.slides : [];
+      // Rend la page
+      if (typeof render === 'function') render('maison');
+      if (typeof startAds === 'function') startAds();
+      badge('Config: '+DEVICE_ID);
+    }
 
     async function loadConfig() {
       try {
         const res = await fetch(CONFIG_URL + '?ts=' + Date.now(), { cache: 'no-store' });
         if (!res.ok) throw new Error('HTTP ' + res.status);
         const cfg = await res.json();
-        window.DATA   = cfg.tabs   || {};
-        window.SLIDES = cfg.slides || [];
-        if (typeof render === 'function') render('maison');
-        if (typeof startAds === 'function') startAds();
+        // cache local pour mode “offline léger”
+        localStorage.setItem('ayoola_cfg_'+DEVICE_ID, JSON.stringify(cfg));
+        applyConfig(cfg);
       } catch (e) {
-        console.warn('Chargement config échoué:', e);
+        // si échec, tente le cache local
+        const cached = localStorage.getItem('ayoola_cfg_'+DEVICE_ID);
+        if (cached) { applyConfig(JSON.parse(cached)); badge('Mode hors-ligne', '#f59e0b'); }
+        else { console.warn('Config introuvable:', e); badge('Config introuvable', '#dc2626'); }
       }
     }
+
+    // lance immédiatement + refresh toutes les 3 min
     loadConfig();
-    setInterval(loadConfig, 180000); // recharge toutes les 3 min
+    setInterval(loadConfig, 180000);
+    // expose pour debug
+    window.__AYOOLA__ = { DEVICE_ID, CONFIG_URL, reload: loadConfig };
   })();
   </script>
 
@@ -97,8 +121,8 @@
     </div>
 
     <div class="panel">
-      <div class="headline" id="headline">Maison — CONTRÔLE INTELLIGENT</div>
-      <div class="sub" id="subcopy">Ambiance été • infos et publicités locales</div>
+      <div class="headline" id="headline">Chargement…</div>
+      <div class="sub" id="subcopy">Infos et publicités locales</div>
       <div class="grid">
         <div class="card" id="leftCard">
           <div class="tempWrap" id="tempWrap">
@@ -133,8 +157,10 @@
   setInterval(()=>{ const d=new Date(); $('clock').textContent=`${pad(d.getHours())}:${pad(d.getMinutes())}`; },1000);
 
   function render(key){
-    const d = window.DATA[key] || window.DATA.maison || {};
+    const all = window.DATA || {};
+    const d   = all[key] || all.maison || {};
     $('headline').textContent = d.leftTitle || '';
+
     if(d.mode==='home'){
       $('tempWrap').style.display='grid';
       $('leftInfo').style.display='none';
@@ -145,6 +171,7 @@
       const ul = $('leftList'); ul.innerHTML='';
       (d.leftList||[]).forEach(t=>{ const li=document.createElement('li'); li.textContent=t; ul.appendChild(li); });
     }
+
     if(d.mode==='info'){
       $('rightInfo').style.display='block';
       $('billboard').style.display='none';
@@ -160,19 +187,22 @@
 
   let slide=0,timer;
   function showSlide(){
-    const bb=$('billboard');bb.innerHTML='';
-    const s=window.SLIDES[slide%window.SLIDES.length];
-    if(!s)return;
+    const bb=$('billboard'); bb.innerHTML='';
+    const slides = window.SLIDES || [];
+    if(!slides.length) return;
+    const s = slides[slide % slides.length];
+
     if(s.type==='video'){
       const v=document.createElement('video');
-      v.src=s.src;v.autoplay=true;v.loop=true;v.muted=true;v.playsInline=true;bb.appendChild(v);
+      v.src=s.src; v.autoplay=true; v.loop=true; v.muted=true; v.playsInline=true;
+      bb.appendChild(v);
     }else{
-      const img=document.createElement('img');img.src=s.src;bb.appendChild(img);
+      const img=document.createElement('img'); img.src=s.src; bb.appendChild(img);
     }
-    bb.onclick=()=>{if(s.href)window.open(s.href,'_blank');};
+    bb.onclick = ()=>{ if(s.href) window.open(s.href,'_blank','noopener'); };
   }
-  function startAds(){clearInterval(timer);showSlide();timer=setInterval(()=>{slide++;showSlide();},9000);}
-  function stopAds(){clearInterval(timer);$('billboard').innerHTML='';}
+  function startAds(){ clearInterval(timer); showSlide(); timer=setInterval(()=>{slide++;showSlide();},9000); }
+  function stopAds(){ clearInterval(timer); const bb=$('billboard'); if(bb) bb.innerHTML=''; }
 
   document.querySelectorAll('.tab').forEach(t=>{
     t.addEventListener('click',()=>{
@@ -181,8 +211,10 @@
       render(t.dataset.key);
     });
   });
-  setInterval(()=>{const base=21,amp=2,now=Date.now()/1000;
-    $('tempVal').textContent=`${Math.round(base+Math.sin(now/180)*amp)}°`;},4000);
+
+  // petite température simulée
+  setInterval(()=>{ const base=21,amp=2,now=Date.now()/1000;
+    $('tempVal').textContent = `${Math.round(base+Math.sin(now/180)*amp)}°`; },4000);
   </script>
 </body>
 </html>
