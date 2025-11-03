@@ -1,0 +1,7 @@
+{
+  "id": "montreal",
+  "ads": [
+    { "type": "image", "src": "https://ayoola.ca/media/promo-mtl1.jpg", "duration": 8 },
+    { "type": "video", "src": "https://ayoola.ca/media/pub-restaurant.mp4", "duration": 12, "mute": true }
+  ]
+}
