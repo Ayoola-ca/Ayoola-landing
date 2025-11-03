@@ -1,8 +1,8 @@
 {
   "id": "montreal",
   "ads": [
-    { "type": "Video", "src":"https://ayoola-ca.github.io/Ayoola-landing/media/pub1.mp4", "duration": 12, "mute": true },
-    { "type": "video", "src": "https://ayoola-ca.github.io/Ayoola-landing/media/pub3.mp4", "duration": 12, "mute": true },
-    { "type": "video", "src": "https://ayoola-ca.github.io/Ayoola-landing/media/pub2.mp4", "duration": 12, "mute": true }
+    { "type": "video", "src": "https://ayoola-ca.github.io/Ayoola-landing/media/pub1.mp4", "duration": 12, "mute": true },
+    { "type": "video", "src": "https://ayoola-ca.github.io/Ayoola-landing/media/pub2.mp4", "duration": 12, "mute": true },
+    { "type": "video", "src": "https://ayoola-ca.github.io/Ayoola-landing/media/pub3.mp4", "duration": 12, "mute": true }
   ]
 }
